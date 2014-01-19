@@ -1,0 +1,23 @@
+<xml>
+
+	<Cabecera>
+		<ID>29</ID>
+	</Cabecera>
+	<Datos>
+		<Nombre>Pablo</Nombre>
+		<Apellido>Carrera</Apellido>
+		<Edad>21</Edad>
+	</Datos>
+
+	<Datos>
+		<Nombre>Antonio</Nombre>
+		<Apellido>Solines</Apellido>
+		<Edad>21</Edad>
+	</Datos>
+
+	<Datos>
+		<Nombre>Rafaela</Nombre>
+		<Apellido>Chriboga</Apellido>
+		<Edad>22</Edad>
+	</Datos>
+</xml>

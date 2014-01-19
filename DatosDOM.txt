@@ -1,0 +1,5 @@
+<div style="background-color:cyan;border:1px black solid;width:300px;text-align:center;">
+<h1>Estos son</h1>
+<h2>Datos cargados</h2>
+<h3>De un archivo externo locuas</h3>
+</div> 

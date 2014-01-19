@@ -1,0 +1,49 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Ejemplo de carga de datos usando Javascript</title>
+</head>
+
+<body>
+
+<div id="Estado"></div>
+
+<script>
+
+// En este ejemplo utilizamos JSON
+// para procesar los datos recibidos y facilitar su lectura.
+
+// Usamos un div para escribir mensajes de estado de vuelta a la página.
+var g_pEstado = document.getElementById("Estado");
+
+// creamos el objeto de solicitud y registramos el evento load
+var g_pRequest = new XMLHttpRequest();
+
+g_pRequest.addEventListener("load", OnLoad, false);
+
+g_pRequest.open("GET", "../DatosJSON.txt", true);			
+
+g_pRequest.send();
+
+// manejador de evento load
+function OnLoad(evt)
+{
+	// chequeamos el estado de la respuesta
+	if(g_pRequest.status == 200 && g_pRequest.readyState == 4)
+	{
+		// JSON.parse convierte el texto de la respuesta
+		// en un árbol de propiedades que podemos consultar con facilidad
+		var pDatos = JSON.parse(g_pRequest.responseText);
+		
+		// escribimos los datos
+		g_pEstado.innerHTML += "Nombre: "+ pDatos.Nombre + "<br/>";
+		g_pEstado.innerHTML += "Apellido: "+ pDatos.Apellido + "<br/>";
+		g_pEstado.innerHTML += "Edad: "+ pDatos.Edad + "<br/>";
+	}
+}
+
+</script>
+
+</body>
+</html>

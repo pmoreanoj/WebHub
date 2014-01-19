@@ -1,0 +1,70 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Ejemplo de carga de datos usando Javascript</title>
+</head>
+
+<body>
+
+<div id="Estado"></div>
+
+<script>
+
+// En este ejemplo utilizamos XMLHttpRequest.responseXML
+// para procesar los datos recibidos y navegarlos.
+
+// Usamos un div para escribir mensajes de estado de vuelta a la página.
+var g_pEstado = document.getElementById("Estado");
+
+// creamos el objeto de solicitud y registramos el evento load
+var g_pRequest = new XMLHttpRequest();
+
+g_pRequest.addEventListener("load", OnLoad, false);
+
+g_pRequest.open("GET", "../DatosXML.xml", true);			
+
+g_pRequest.send();
+
+// manejador de evento load
+function OnLoad(evt)
+{
+	// chequeamos el estado de la respuesta
+	if(g_pRequest.status == 200 && g_pRequest.readyState == 4)
+	{
+		// usamos getElementsByTagName para buscar un tag específico dentro de la estructura
+		// NOTA: getElementsByTagName retorna un Array de resultados,
+		// por lo que hay que navegar el arreglo para acceder a los resultados
+		var cabecera = g_pRequest.responseXML.getElementsByTagName("Cabecera")[0];
+		
+		// para conseguir un sub-nodo, podemos usar getElementsByTagName sobre un nodo
+		var nodoID = cabecera.getElementsByTagName("ID")[0];
+		
+		// para conseguir el valor del nodo,
+		// primero hay que conseguir el primer hijo,
+		// y acceder a su propiedad nodeValue
+		var id = nodoID.childNodes[0].nodeValue;
+		
+		g_pEstado.innerHTML += "ID: "+ id + "<br/>";
+		
+		// como getElementsByTagName retorna arreglos,
+		// es fácil iterar a través de colecciones de resultados
+		var datos = g_pRequest.responseXML.getElementsByTagName("Datos");
+		for(var i = 0; i < datos.length; i++)
+		{
+			// obtenemos los datos hijos de cada elemento en la lista de datos
+			var nombre = datos[i].getElementsByTagName("Nombre")[0].childNodes[0].nodeValue;
+			var apellido = datos[i].getElementsByTagName("Apellido")[0].childNodes[0].nodeValue;
+			var edad = datos[i].getElementsByTagName("Edad")[0].childNodes[0].nodeValue;
+					
+			g_pEstado.innerHTML += "<br/>Nombre: "+ nombre + "<br/>";
+			g_pEstado.innerHTML += "Apellido: "+ apellido + "<br/>";
+			g_pEstado.innerHTML += "Edad: "+ edad + "<br/><br/>";
+		}
+	}
+}
+
+</script>
+
+</body>
+</html>

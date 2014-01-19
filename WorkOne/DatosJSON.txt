@@ -1,0 +1,27 @@
+{"Figuras" : [
+    	{
+		"Name" : "Circulo",
+		"NameImg" : "circulo.png",
+		"x" : "800px",
+		"y" : "100px"
+		},
+        {
+        "Name" : "Triangulo",
+    	"NameImg" : "triangulo.png",
+		"x" : "300px",
+		"y" : "200px"   
+        },
+        {
+        "Name" : "Cuadrado",
+        "NameImg" : "cuadrado.png",
+		"x" : "100px",
+		"y" : "300px"   
+        },
+        {
+        "Name" : "Pentagono",
+        "NameImg" : "pentagono.png",
+		"x" : "500px",
+		"y" : "200px"   
+        }
+]
+}

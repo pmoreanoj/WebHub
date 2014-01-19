@@ -1,0 +1,165 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Ejemplo de carga de datos usando Javascript</title>
+</head>
+
+<body>
+
+<div id="Estado"></div>
+
+<script>
+
+// Este ejemplo utiliza el objeto XMLHttpRequest
+// para cargar datos de manera asíncrona durante la ejecución de la página.
+// Para que funcione correctamente, la página debe ser accedida desde un servidor Web.
+
+// Usamos un div para escribir mensajes de estado de vuelta a la página.
+var g_pEstado = document.getElementById("Estado");
+
+// Creamos un objeto XMLHttpRequest,
+// el cual manejará la carga de los datos.
+var g_pRequest = new XMLHttpRequest();
+
+// Registramos los eventos en el objeto.
+
+// onreadystatechange actualizará el estado de la comunicación con el server
+g_pRequest.onreadystatechange = OnChange;
+
+// "progress" recibe mensajes de progreso de la descarga.
+// Tiene que ser registrado ANTES de iniciar la transferencia.
+g_pRequest.addEventListener("progress", OnProgress, false);
+
+// "load" se dispara cuando toda la información ha sido recibida
+g_pRequest.addEventListener("load", OnLoad, false);
+
+// "error" se dispara si hay un error de conexión
+g_pRequest.addEventListener("error", OnError, false);
+
+// "abort" se dispara si la conexión fue cancelada por el programa o el usuario
+g_pRequest.addEventListener("abort", OnAbort, false);
+
+// XMLHttpRequest.open() establece los datos de comunicación con el server
+g_pRequest.open("GET",				// método de la solicitud. Por lo general "GET" o "POST"
+				"../DatosDOM.txt",		// URL de la solicitud.
+				true);				// si es verdadero, la conexión es asíncrona;
+									// de lo contrario es síncrona (no recomendado)
+
+// XMLHttpRequest.send() envía la solicitud.
+// las variables POST se pueden enviar como un argumento de tipo string
+g_pRequest.send();
+
+// Handler de cambio de estado.
+// Utilizamos propiedades de XMLHttpRequest para determinar
+// si la conexión ha terminado exitosamente.
+function OnChange(evt)
+{
+	// XMLHttpRequest.readyState es un código numérico
+	// que determina el estado de la conexión.
+	switch(g_pRequest.readyState)
+	{
+		// estado 0 = conexión no inicializada.
+		// es muy difícil que entremos en este estado.
+		case 0:
+			g_pEstado.innerHTML += "Solicitud no inicializada.<br/>";
+			break;
+		
+		// estado 1 = conexión establecida.
+		// el server existe, nos hemos conectado con él,
+		// pero todavía no le enviamos la solicitud
+		case 1:
+			g_pEstado.innerHTML += "Conexión establecida.<br/>";
+			break;
+		
+		// estado 2 = solicitud recibida.
+		// La solicitud y variables han sido recibidas,
+		// Pero todavía no aceptadas. Todavía no recibimos datos.
+		case 2:
+			g_pEstado.innerHTML += "Solicitud recibida.<br/>";
+			break;
+		
+		// estado 3 = procesando solicitud.
+		// La solicitud y variables han sido aceptadas.
+		// El server está construyendo el mensaje de respuesta.
+		case 3:
+			g_pEstado.innerHTML += "Procesando solicitud.<br/>";
+			break;
+		
+		// estado 4 = respuesta recibida.
+		// Hemos recibido los datos de respuesta
+		// y están listos para ser utilizados.
+		case 4:
+		
+			g_pEstado.innerHTML += "Respuesta recibida.<br/>";
+				
+			// además de chequear el estado de disponibilidad, es conveniente confirmar
+			// el estado HTTP del mensaje retornado. 200 = ok, 404 = not found
+			if(g_pRequest.status == 200)
+			{
+				// respuesta recibida correctamente
+				g_pEstado.innerHTML += "Status 200: OK.<br/>";
+				
+			} else {
+			
+				// error. dirección no encontrada.
+				// reintentar, etc.
+				g_pEstado.innerHTML += "Status 404: Not found.<br/>";
+			}
+						
+			break;
+	}
+}
+
+// Handler de progreso.
+// A diferencia de Loader y URLLoader en Flash,
+// XMLHttpRequest no siempre recibe los bytes totales de la transferencia,
+// por lo que no podemos calcular el porcentaje de carga
+// Esto lo podemos cambiar utilizando headers en PHP
+function OnProgress(evt)
+{
+	// lengthComputable determina si conocemos los bytes totales
+	if(evt.lengthComputable)
+	{
+		// calculamos el porcentaje usando regla de 3
+		var porcentaje = parseInt((evt.loaded / event.total) * 100);
+		g_pEstado.innerHTML += "Progreso: "+ porcentaje +"%<br/>";
+	} else {
+	
+		// no podemos calcular el porcentaje,
+		// pero sabemos el número de bytes recibidos
+		g_pEstado.innerHTML += "Progreso: "+ evt.loaded +" bytes<br/>";
+	}
+}
+
+// Handler de carga terminada.
+// En esta función, si todo está ok, podemos acceder a las propiedades
+// responseText y responseXML para procesar los datos recibidos.
+function OnLoad(evt)
+{
+	// chequear status y readyState
+	if(g_pRequest.status == 200 && g_pRequest.readyState == 4)
+	{
+		// XMLHttpRequest.responseText contiene
+		// los datos de la respuesta en formato string
+		g_pEstado.innerHTML += "Carga terminada exitosamente. Datos:<br/>";
+		g_pEstado.innerHTML += g_pRequest.responseText + "<br/>";
+	}
+}
+
+// Handler de error.
+function OnError(evt)
+{
+	g_pEstado.innerHTML += "Se produjo un error en la transferencia.<br/>";
+}
+
+// Handler de cancelación.
+function OnAbort(evt)
+{
+	g_pEstado.innerHTML += "Transferencia cancelada.<br/>";
+}
+
+</script>
+
+</body>
+</html>

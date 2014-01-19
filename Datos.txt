@@ -1,0 +1,8 @@
+<datos>
+	<cap>Estos son los datos cargados de un archivo externo.</cap>
+	<valor1>2000</valor1>
+	<valor2>
+		<sub1>AAA</sub1>
+		<sub2>BBB</sub2>
+	</valor2>
+</datos>
